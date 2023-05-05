@@ -5,6 +5,12 @@ const novoPreco = ref()
 const novoItemNome = ref('')
 const mostrarADD = ref(true)
 
+const novoItemCarrinho = ref({
+  id:'',
+  nome:'',
+  preco:'',
+  quantidade:'',
+})
 const listaProdutos = ref([
 
 {
@@ -21,6 +27,8 @@ const listaProdutos = ref([
 }
 ])
 
+const carrinho = ref([])
+
 function processaItem(e){
   listaProdutos.value.push({
     id: listaProdutos.value.length + 1,
@@ -32,6 +40,16 @@ function processaItem(e){
   novoPreco.value = 0
   mostrarADD.value = true
 }
+
+function addCarrinho(produto){
+  novoItemCarrinho.value.id = produto.id
+  novoItemCarrinho.value.nome = produto.nome
+  novoItemCarrinho.value.preco = produto.preco
+  novoItemCarrinho.value.quantidade = produto.quantidade
+carrinho.value.push(...{novoItemCarrinho})
+
+}
+
 </script>
 
 <template>
@@ -40,6 +58,9 @@ function processaItem(e){
    <p> Nome: {{ produto.nome }}</p>
    <p> Preço: {{ produto.preco }}</p>
   <p> Quantidade: {{ produto.quantidade }}</p>
+  <button @click="produto.quantidade++">+</button>
+  <button @click="produto.quantidade--">-</button>
+  <button @click="addCarrinho(produto)">Adicionar ao carrinho</button>
 </div>
 
 </div>
@@ -54,7 +75,14 @@ function processaItem(e){
   </form>
 </div>
 
-
+<div class="carrinho" >
+  <h1>carrinho</h1>
+  <div class="item" v-for="produto in carrinho" :key="produto.id">
+    <p> Nome: {{ produto.nome }}</p>
+   <p> Preço: {{ produto.preco }}</p>
+  <p> Quantidade: {{ produto.quantidade }}</p>
+  </div>
+</div>
 </template>
 
 <style>
