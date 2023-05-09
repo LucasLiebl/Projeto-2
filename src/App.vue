@@ -5,12 +5,8 @@ const novoPreco = ref()
 const novoItemNome = ref('')
 const mostrarADD = ref(true)
 
-const novoItemCarrinho = ref({
-  id:'',
-  nome:'',
-  preco:'',
-  quantidade:'',
-})
+const admMode = ref(false)
+
 const listaProdutos = ref([
 
 {
@@ -42,18 +38,15 @@ function processaItem(e){
 }
 
 function addCarrinho(produto){
-  novoItemCarrinho.value.id = produto.id
-  novoItemCarrinho.value.nome = produto.nome
-  novoItemCarrinho.value.preco = produto.preco
-  novoItemCarrinho.value.quantidade = produto.quantidade
-carrinho.value.push(...{novoItemCarrinho})
+  
+carrinho.value.push({ ...produto })
 
 }
 
 </script>
 
 <template>
-<div v-for="produto in listaProdutos" :key="produto.id" class="item">
+  <div v-for="produto in listaProdutos" :key="produto.id" class="item">
 <div>
    <p> Nome: {{ produto.nome }}</p>
    <p> Preço: {{ produto.preco }}</p>
@@ -64,7 +57,8 @@ carrinho.value.push(...{novoItemCarrinho})
 </div>
 
 </div>
-<button @click="mostrarADD = !mostrarADD" v-if="mostrarADD">+</button>
+  <div v-if="admMode">
+  <button @click="mostrarADD = !mostrarADD" v-if="mostrarADD">+</button>
 <div v-else>
   <form @submit.prevent="processaItem">
     <label for="novoItemNome">Nome:</label>
@@ -74,6 +68,11 @@ carrinho.value.push(...{novoItemCarrinho})
     <button type="submit">Enviar</button>
   </form>
 </div>
+</div>
+  <div v-else>
+    <button @click="admMode = !admMode">ADM MODE</button>
+
+
 
 <div class="carrinho" >
   <h1>carrinho</h1>
@@ -83,6 +82,8 @@ carrinho.value.push(...{novoItemCarrinho})
   <p> Quantidade: {{ produto.quantidade }}</p>
   </div>
 </div>
+</div>
+
 </template>
 
 <style>
